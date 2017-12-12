@@ -17,6 +17,7 @@ def downAllMp3():
             urllib.urlretrieve(url2[0:-6]+"0"+a.__str__()+".mp3","data/"+"0"+a.__str__()+"/"+"0"+a.__str__()+".mp3")
         else:
             urllib.urlretrieve(url2[0:-6]+a.__str__()+".mp3","data/"+a.__str__()+"/"+a.__str__()+".mp3")
+
 #先下载文本在下载mp3oo
 def downAllTxt():
     for a in range(1, 61):
