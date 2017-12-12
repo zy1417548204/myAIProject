@@ -11,8 +11,10 @@ import json
 （3）python 的换行符果然另类／r/n 不管用的
 """
 class TxtDetect(object):
+    #非汉字正则
     p2 = r"^[\u4e00-\u9fa5]"
     pattern2 = re.compile(p2)
+    #打开文件并设置追加模式
     result = open('/Users/edz/PycharmProjects/audio_recognition_project/result.txt', 'a')
     def txtDetect(self,josonfile):
         # 加载json文本
@@ -30,6 +32,7 @@ class TxtDetect(object):
 
     # 加载文件
     def loadAndoutput(self):
+
         txtNames = os.listdir("/Users/edz/PycharmProjects/audio_recognition_project/extract_json")
         for txtName in txtNames:
             # print txtName
