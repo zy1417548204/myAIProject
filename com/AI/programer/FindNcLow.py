@@ -4,6 +4,7 @@ import os
 import re
 import json
 import sys
+
 """
 检测nc小于一的并将起列举出来
 """
@@ -11,6 +12,7 @@ import sys
 result = open('/Users/edz/PycharmProjects/audio_recognition_project/Ncresult.txt', 'a')
 reload(sys)
 sys.setdefaultencoding( "utf-8" )
+
 def detectnc(path):
     jfile = open(path)
     hjson = json.load(jfile)
