@@ -14,7 +14,7 @@ from keras.preprocessing.text import text_to_word_sequence, one_hot, Tokenizer;
 from keras.layers import Input, Dense, merge, Dropout, BatchNormalization, Activation, Conv1D, Lambda;
 #返回当前进程的工作目录
 DIR=os.getcwd();
-
+#打开train.word.txt
 with open(DIR+"/train.word.txt") as f:
     #按行切割
     texts=f.read().split("\n");
@@ -105,10 +105,10 @@ for i in np.arange(0,len(mfcc_vec_origin)):
             mfcc_vec[i,j,k]=ele;
 np.save(DIR+"/mfcc_vec",mfcc_vec);'''
 
-#加载数据
+#加载数据（持久化的npy数据）
 mfcc_input=np.load(DIR+"/mfcc_vec.npy");
 
-#创建输入张量
+#创建输入张量（mfcc_input第二层第元素个数，mfcc_input第三层第元素个数）
 input_tensor=Input(shape=(mfcc_input.shape[1],mfcc_input.shape[2]));
 #构建网络模型
 #Conv1D一维卷积 即（时域卷积），用以在一维输入信号上进行邻域滤波
@@ -195,6 +195,7 @@ def ctc_lambda_function(args):
     y_true_input, logit, logit_length_input, y_true_length_input=args;
     #在batch上运行CTC损失算法"" y_true：形如(samples，max_tring_length)的张量，包含标签的真值 y_pred：形如(samples，time_steps，num_categories)的张量，包含预测值或输出的softmax值
     # input_length：形如(samples，1)的张量，包含y_pred中每个batch的序列长   label_length：形如(samples，1)的张量，包含y_true中每个batch的序列长
+    #细节算法见http://x-algo.cn/index.php/2017/05/31/2345/
     return K.ctc_batch_cost(y_true_input,logit,logit_length_input,y_true_length_input);
 #求和
 skip_tensor=merge([s for s in skip],mode="sum");
@@ -271,7 +272,9 @@ Torch：learning_rate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8
 Adam 是一种在深度学习模型中用来替代随机梯度下降的优化算法。
 Adam 结合了 AdaGrad 和 RMSProp 算法最优的性能，它还是能提供解决稀疏梯度和噪声问题的优化方法。
 Adam 的调参相对简单，默认参数就可以处理绝大部分的问题。
-而接下来的第二部分我们可以从原论文出发具体展开 Adam 算法的过程和更新规则等。"""
+而接下来的第二部分我们可以从原论文出发具体展开 Adam 算法的过程和更新规则等。
+内部原理详细介绍参照http://www.sohu.com/a/156495506_465975"""
+
 opt=adam(lr=0.0003);
 model.fit(x=[mfcc_input,np.ones(10000)*673,char_vec,char_length],y=np.ones(10000),callbacks=[early,lr_change,checkpoint],
           batch_size=50,epochs=1000);
